@@ -10,7 +10,7 @@ platform:
 steps:
 - name: build
   pull: always
-  image: rancher/hardened-build-base:v1.16.7b7
+  image: rancher/hardened-build-base:v1.16.10b7
   commands:
   - make DRONE_TAG=${DRONE_TAG} image-build-operator
   - make DRONE_TAG=${DRONE_TAG} image-build-network-config-daemon
@@ -20,7 +20,7 @@ steps:
     path: /var/run/docker.sock
 
 - name: publish
-  image: rancher/hardened-build-base:v1.16.7b7
+  image: rancher/hardened-build-base:v1.16.10b7
   commands:
   - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
   - make DRONE_TAG=${DRONE_TAG} image-push-operator image-manifest-operator
@@ -39,7 +39,7 @@ steps:
     - tag
 
 - name: scan
-  image: rancher/hardened-build-base:v1.16.7b7
+  image: rancher/hardened-build-base:v1.16.10b7
   commands:
   - make DRONE_TAG=${DRONE_TAG} image-scan-operator
   - make DRONE_TAG=${DRONE_TAG} image-scan-network-config-daemon
