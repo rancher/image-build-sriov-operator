@@ -42,6 +42,7 @@ FROM ${BCI_IMAGE} as config-daemon
 WORKDIR /
 RUN zypper update -y && \
     ARCH_DEP_PKGS=$(if [ "$(uname -m)" != "s390x" ]; then echo -n mstflint ; fi) && \
+    zypper install -y hwdata $ARCH_DEP_PKGS && \
     zypper clean --all
 COPY --from=config-daemon-builder /go/sriov-network-operator/build/_output/linux/amd64/sriov-network-config-daemon /usr/bin/
 COPY --from=config-daemon-builder /go/sriov-network-operator/build/_output/linux/amd64/plugins /plugins
