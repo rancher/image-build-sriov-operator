@@ -40,11 +40,10 @@ RUN cd sriov-network-operator && \
 # Create the config daemon image
 FROM ${BCI_IMAGE} as config-daemon
 WORKDIR /
-COPY centos.repo /etc/yum.repos.d/centos.repo
-RUN microdnf update -y && \
+RUN zypper update -y && \
     ARCH_DEP_PKGS=$(if [ "$(uname -m)" != "s390x" ]; then echo -n mstflint ; fi) && \
     microdnf install hwdata $ARCH_DEP_PKGS && \
-    microdnf clean all
+    zypper clean --all
 COPY --from=config-daemon-builder /go/sriov-network-operator/build/_output/linux/amd64/sriov-network-config-daemon /usr/bin/
 COPY --from=config-daemon-builder /go/sriov-network-operator/build/_output/linux/amd64/plugins /plugins
 COPY --from=config-daemon-builder /go/sriov-network-operator/bindata /bindata
