@@ -1,8 +1,7 @@
-# last commit on 2021-10-06
 ARG TAG="v1.1.0"
 ARG GOBORING_VERSION=1.17.5
 ARG UBI_IMAGE=registry.access.redhat.com/ubi7/ubi-minimal:latest
-ARG GOBORING_IMAGE=goboring/golang:1.16.7b7
+ARG GOBORING_IMAGE=goboring/golang:1.18.1b7
 ARG HARDENED_IMAGE=rancher/hardened-build-base:v${GOBORING_VERSION}b7
 
 FROM ${HARDENED_IMAGE} as base-builder
