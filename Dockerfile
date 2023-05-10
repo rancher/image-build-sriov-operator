@@ -31,7 +31,7 @@ COPY centos.repo /etc/yum.repos.d/centos.repo
 RUN zypper update -y && \
     ARCH_DEP_PKGS=$(if [ "$(uname -m)" != "s390x" ]; then echo -n mstflint ; fi) && \
     zypper install -y hwdata $ARCH_DEP_PKGS
-COPY --from=builder /go/sriov-network-operator/build/_output/linux/amd64/sriov-network-config-daemon /usr/bin/
+COPY --from=builder /go/sriov-network-operator/build/_output/linux/${ARCH}/sriov-network-config-daemon /usr/bin/
 COPY --from=builder /go/sriov-network-operator/bindata /bindata
 ENTRYPOINT ["/usr/bin/sriov-network-config-daemon"]
 
@@ -40,12 +40,12 @@ FROM ${BCI_IMAGE} as webhook
 WORKDIR /
 LABEL io.k8s.display-name="sriov-network-webhook" \
       io.k8s.description="This is an admission controller webhook that mutates and validates customer resources of sriov network operator."
-COPY --from=builder /go/sriov-network-operator/build/_output/linux/amd64/webhook /usr/bin/webhook
+COPY --from=builder /go/sriov-network-operator/build/_output/linux/${ARCH}/webhook /usr/bin/webhook
 CMD ["/usr/bin/webhook"]
 
 # Create the operator image
 FROM ${BCI_IMAGE} as operator
 WORKDIR /
-COPY --from=builder /go/sriov-network-operator/build/_output/linux/amd64/manager /usr/bin/sriov-network-operator
+COPY --from=builder /go/sriov-network-operator/build/_output/linux/${ARCH}/manager /usr/bin/sriov-network-operator
 COPY --from=builder /go/sriov-network-operator/bindata /bindata
 ENTRYPOINT ["/usr/bin/sriov-network-operator"]
