@@ -7,6 +7,7 @@ ARG HARDENED_IMAGE=rancher/hardened-build-base:${GOBORING_VERSION}
 FROM ${HARDENED_IMAGE} as base
 ARG TAG
 ARG BUILD
+ARG ARCH="amd64"
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
 RUN git clone https://github.com/k8snetworkplumbingwg/sriov-network-operator && \
     cd sriov-network-operator && \ 
