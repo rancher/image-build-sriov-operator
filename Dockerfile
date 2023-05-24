@@ -3,11 +3,11 @@ ARG TAG="v1.2.0"
 ARG GOBORING_VERSION=v1.20.4b11
 ARG BCI_IMAGE=registry.suse.com/bci/bci-base
 ARG HARDENED_IMAGE=rancher/hardened-build-base:${GOBORING_VERSION}
+ARG ARCH
 
 FROM ${HARDENED_IMAGE} as base
 ARG TAG
 ARG BUILD
-ARG ARCH="amd64"
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
 RUN git clone https://github.com/k8snetworkplumbingwg/sriov-network-operator && \
     cd sriov-network-operator && \ 
