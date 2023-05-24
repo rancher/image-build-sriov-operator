@@ -4,7 +4,7 @@ ARG GOBORING_VERSION=v1.20.4b11
 ARG BCI_IMAGE=registry.suse.com/bci/bci-base
 ARG HARDENED_IMAGE=rancher/hardened-build-base:${GOBORING_VERSION}
 
-FROM ${HARDENED_IMAGE} as base-builder
+FROM ${HARDENED_IMAGE} as base
 ARG TAG
 ARG BUILD
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
@@ -13,7 +13,7 @@ RUN git clone https://github.com/k8snetworkplumbingwg/sriov-network-operator && 
     git checkout ${TAG} && \ 
     make clean
 
-FROM base-builder as builder
+FROM base as builder
 ENV CGO_ENABLED=0
 ARG TAG
 ARG BUILD
@@ -26,6 +26,7 @@ RUN cd sriov-network-operator && \
 
 # Create the config daemon image
 FROM ${BCI_IMAGE} as config-daemon
+ARG ARCH
 WORKDIR /
 COPY centos.repo /etc/yum.repos.d/centos.repo
 RUN zypper update -y && \
