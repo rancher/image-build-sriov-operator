@@ -26,7 +26,7 @@ RUN cd sriov-network-operator && \
     make _build-sriov-network-config-daemon
 
 # Create the config daemon image
-FROM ${BCI_IMAGE} as config-daemon_amd64
+FROM ${BCI_IMAGE} as config-daemon_rootfs_overlay_amd64
 WORKDIR /
 COPY centos.repo /etc/yum.repos.d/centos.repo
 RUN zypper update -y && \
@@ -36,7 +36,7 @@ COPY --from=builder /go/sriov-network-operator/build/_output/linux/amd64/sriov-n
 COPY --from=builder /go/sriov-network-operator/bindata /bindata
 ENTRYPOINT ["/usr/bin/sriov-network-config-daemon"]
 
-FROM ${BCI_IMAGE} as config-daemon_arm64
+FROM ${BCI_IMAGE} as config-daemon_rootfs_overlay_arm64
 WORKDIR /
 COPY centos.repo /etc/yum.repos.d/centos.repo
 RUN zypper update -y && \
@@ -47,14 +47,14 @@ COPY --from=builder /go/sriov-network-operator/bindata /bindata
 ENTRYPOINT ["/usr/bin/sriov-network-config-daemon"]
 
 # Create the webhook image
-FROM ${BCI_IMAGE} as webhook_amd64
+FROM ${BCI_IMAGE} as webhook_rootfs_overlay_amd64
 WORKDIR /
 LABEL io.k8s.display-name="sriov-network-webhook" \
       io.k8s.description="This is an admission controller webhook that mutates and validates customer resources of sriov network operator."
 COPY --from=builder /go/sriov-network-operator/build/_output/linux/amd64/webhook /usr/bin/webhook
 CMD ["/usr/bin/webhook"]
 
-FROM ${BCI_IMAGE} as webhook_arm64
+FROM ${BCI_IMAGE} as webhook_rootfs_overlay_arm64
 WORKDIR /
 LABEL io.k8s.display-name="sriov-network-webhook" \
       io.k8s.description="This is an admission controller webhook that mutates and validates customer resources of sriov network operator."
@@ -62,13 +62,13 @@ COPY --from=builder /go/sriov-network-operator/build/_output/linux/arm64/webhook
 CMD ["/usr/bin/webhook"]
 
 # Create the operator image
-FROM ${BCI_IMAGE} as operator_amd64
+FROM ${BCI_IMAGE} as operator_rootfs_overlay_amd64
 WORKDIR /
 COPY --from=builder /go/sriov-network-operator/build/_output/linux/amd64/manager /usr/bin/sriov-network-operator
 COPY --from=builder /go/sriov-network-operator/bindata /bindata
 ENTRYPOINT ["/usr/bin/sriov-network-operator"]
 
-FROM ${BCI_IMAGE} as operator_arm64
+FROM ${BCI_IMAGE} as operator_rootfs_overlay_arm64
 WORKDIR /
 COPY --from=builder /go/sriov-network-operator/build/_output/linux/arm64/manager /usr/bin/sriov-network-operator
 COPY --from=builder /go/sriov-network-operator/bindata /bindata
