@@ -30,6 +30,7 @@ FROM ${BCI_IMAGE} as config-daemon
 ARG ARCH
 WORKDIR /
 COPY centos.repo /etc/yum.repos.d/centos.repo
+RUN echo ${ARCH}
 RUN zypper update -y && \
     ARCH_DEP_PKGS=$(if [ "$(uname -m)" != "s390x" ]; then echo -n mstflint ; fi) && \
     zypper install -y hwdata $ARCH_DEP_PKGS
