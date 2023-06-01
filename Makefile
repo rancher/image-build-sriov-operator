@@ -33,7 +33,8 @@ image-build-operator:
 		--target operator \
 		--tag $(ORG)/hardened-sriov-network-operator:$(TAG) \
 		--tag $(ORG)/hardened-sriov-network-operator:$(TAG)-$(ARCH) \
-		-f ./Dockerfile.$(ARCH)
+		-f ./Dockerfile.$(ARCH) \
+	.
 
 .PHONY: image-push-operator
 image-push-operator:
@@ -61,7 +62,8 @@ image-build-network-config-daemon:
 		--target config-daemon \
 		--tag $(ORG)/hardened-sriov-network-config-daemon:$(TAG) \
 		--tag $(ORG)/hardened-sriov-network-config-daemon:$(TAG)-$(ARCH) \
-		-f ./Dockerfile.$(ARCH)
+		-f ./Dockerfile.$(ARCH) \
+	.
 
 .PHONY: image-push-network-config-daemon
 image-push-network-config-daemon:
@@ -89,7 +91,8 @@ image-build-sriov-network-webhook:
 		--target webhook \
 		--tag $(ORG)/hardened-sriov-network-webhook:$(TAG) \
 		--tag $(ORG)/hardened-sriov-network-webhook:$(TAG)-$(ARCH) \
-		-f ./Dockerfile.$(ARCH)
+		-f ./Dockerfile.$(ARCH) \
+	.
 
 .PHONY: image-push-sriov-network-webhook
 image-push-sriov-network-webhook:
