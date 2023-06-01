@@ -1,36 +1,37 @@
 # last commit on 2021-10-06
 ARG TAG="v1.2.0"
-ARG GOBORING_VERSION=1.18.5
-ARG BCI_IMAGE=registry.suse.com/bci/bci-base:latest
-ARG HARDENED_IMAGE=rancher/hardened-build-base:v${GOBORING_VERSION}b7
+ARG GOBORING_VERSION=v1.20.4b11
+ARG BCI_IMAGE=registry.suse.com/bci/bci-base
+ARG HARDENED_IMAGE=rancher/hardened-build-base:${GOBORING_VERSION}
+ARG ARCH
 
-FROM ${HARDENED_IMAGE} as base-builder
+FROM ${HARDENED_IMAGE} as base
 ARG TAG
 ARG BUILD
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
-RUN git clone https://github.com/k8snetworkplumbingwg/sriov-network-operator \
-    && cd sriov-network-operator \ 
-    && git checkout ${TAG} \ 
-    && make clean
+RUN git clone https://github.com/k8snetworkplumbingwg/sriov-network-operator && \
+    cd sriov-network-operator && \ 
+    git checkout ${TAG} && \ 
+    make clean
 
-FROM base-builder as builder
+FROM base as builder
 ENV CGO_ENABLED=0
 ARG TAG
 ARG BUILD
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
 ENV GOFLAGS=-trimpath
-RUN cd sriov-network-operator \
-    && make _build-manager \
-    && make _build-webhook \
-    && make _build-sriov-network-config-daemon
+RUN cd sriov-network-operator && \
+    make _build-manager && \
+    make _build-webhook && \
+    make _build-sriov-network-config-daemon
 
 # Create the config daemon image
 FROM ${BCI_IMAGE} as config-daemon
 WORKDIR /
 COPY centos.repo /etc/yum.repos.d/centos.repo
-RUN zypper update -y \
-    && ARCH_DEP_PKGS=$(if [ "$(uname -m)" != "s390x" ]; then echo -n mstflint ; fi) \
-    && zypper install -y hwdata $ARCH_DEP_PKGS
+RUN zypper update -y && \
+    ARCH_DEP_PKGS=$(if [ "$(uname -m)" != "s390x" ]; then echo -n mstflint ; fi) && \
+    zypper install -y hwdata $ARCH_DEP_PKGS
 COPY --from=builder /go/sriov-network-operator/build/_output/linux/amd64/sriov-network-config-daemon /usr/bin/
 COPY --from=builder /go/sriov-network-operator/bindata /bindata
 ENTRYPOINT ["/usr/bin/sriov-network-config-daemon"]
