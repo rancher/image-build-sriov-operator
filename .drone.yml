@@ -110,7 +110,7 @@ volumes:
 ---
 kind: pipeline
 type: docker
-name: manifest
+name: manifest-operator
 platform:
   os: linux
   arch: amd64
@@ -134,7 +134,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: manifest
+name: manifest-daemon
 platform:
   os: linux
   arch: amd64
@@ -158,7 +158,7 @@ depends_on:
 ---
 kind: pipeline
 type: docker
-name: manifest
+name: manifest-webhook
 platform:
   os: linux
   arch: amd64
