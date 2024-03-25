@@ -42,7 +42,7 @@ image-push-operator:
 
 .PHONY: image-scan-operator
 image-scan-operator:
-	trivy --severity $(SEVERITIES) --no-progress --ignore-unfixed $(ORG)/hardened-sriov-network-operator:$(TAG)
+	trivy image --severity $(SEVERITIES) --no-progress --ignore-unfixed $(ORG)/hardened-sriov-network-operator:$(TAG)
 
 .PHONY: image-build-network-config-daemon
 image-build-network-config-daemon:
@@ -63,7 +63,7 @@ image-push-network-config-daemon:
 
 .PHONY: image-scan-network-config-daemon
 image-scan-network-config-daemon:
-	trivy --severity $(SEVERITIES) --no-progress --ignore-unfixed $(ORG)/hardened-sriov-network-config-daemon:$(TAG)
+	trivy image --severity $(SEVERITIES) --no-progress --ignore-unfixed $(ORG)/hardened-sriov-network-config-daemon:$(TAG)
 
 .PHONY: image-build-sriov-network-webhook
 image-build-sriov-network-webhook:
@@ -84,4 +84,4 @@ image-push-sriov-network-webhook:
 
 .PHONY: image-scan-sriov-network-webhook
 image-scan-sriov-network-webhook:
-	trivy --severity $(SEVERITIES) --no-progress --ignore-unfixed $(ORG)/hardened-sriov-network-webhook:$(TAG)
+	trivy image --severity $(SEVERITIES) --no-progress --ignore-unfixed $(ORG)/hardened-sriov-network-webhook:$(TAG)
