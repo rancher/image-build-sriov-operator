@@ -1,5 +1,6 @@
 # last commit on 2021-10-06
 ARG TAG="v1.2.0"
+ARG COMMIT="f2ca88418036a7836ea2c0bd1f648a47774997c4"
 ARG GOBORING_VERSION=v1.21.8b1
 ARG BCI_IMAGE=registry.suse.com/bci/bci-base
 ARG HARDENED_IMAGE=rancher/hardened-build-base:${GOBORING_VERSION}
@@ -10,8 +11,8 @@ ARG TAG
 ARG BUILD
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
 RUN git clone https://github.com/k8snetworkplumbingwg/sriov-network-operator && \
-    cd sriov-network-operator && \ 
-    git checkout ${TAG} && \ 
+    cd sriov-network-operator && \
+    git checkout ${COMMIT} && \
     make clean
 
 FROM base as builder
