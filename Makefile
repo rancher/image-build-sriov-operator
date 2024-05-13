@@ -15,25 +15,21 @@ ORG ?= rancher
 TAG ?= v1.2.0$(BUILD_META)
 export DOCKER_BUILDKIT?=1
 
-ifneq ($(DRONE_TAG),)
-	TAG := $(DRONE_TAG)
-endif
-
 ifeq (,$(filter %$(BUILD_META),$(TAG)))
-	$(error TAG needs to end with build metadata: $(BUILD_META))
+$(error TAG $(TAG) needs to end with build metadata: $(BUILD_META))
 endif
 
 .PHONY: image-build-operator
 image-build-operator:
-	docker build \
+	docker buildx build \
+		--load \
+		--platform=$(ARCH) \
 		--pull \
-		--build-arg ARCH=$(ARCH) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--build-arg BUILD=$(BUILD_META) \
 		--target operator \
 		--tag $(ORG)/hardened-sriov-network-operator:$(TAG) \
 		--tag $(ORG)/hardened-sriov-network-operator:$(TAG)-$(ARCH) \
-		-f ./Dockerfile.$(ARCH) \
 	.
 
 .PHONY: image-push-operator
@@ -46,15 +42,14 @@ image-scan-operator:
 
 .PHONY: image-build-network-config-daemon
 image-build-network-config-daemon:
-	docker build \
+	docker buildx build \
 		--pull \
-		--build-arg ARCH=$(ARCH) \
+		--platform=$(ARCH) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--build-arg BUILD=$(BUILD_META) \
 		--target config-daemon \
 		--tag $(ORG)/hardened-sriov-network-config-daemon:$(TAG) \
 		--tag $(ORG)/hardened-sriov-network-config-daemon:$(TAG)-$(ARCH) \
-		-f ./Dockerfile.$(ARCH) \
 	.
 
 .PHONY: image-push-network-config-daemon
@@ -67,15 +62,14 @@ image-scan-network-config-daemon:
 
 .PHONY: image-build-sriov-network-webhook
 image-build-sriov-network-webhook:
-	docker build \
+	docker buildx build \
 		--pull \
-		--build-arg ARCH=$(ARCH) \
+		--platform=$(ARCH) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--build-arg BUILD=$(BUILD_META) \
 		--target webhook \
 		--tag $(ORG)/hardened-sriov-network-webhook:$(TAG) \
 		--tag $(ORG)/hardened-sriov-network-webhook:$(TAG)-$(ARCH) \
-		-f ./Dockerfile.$(ARCH) \
 	.
 
 .PHONY: image-push-sriov-network-webhook
@@ -85,3 +79,13 @@ image-push-sriov-network-webhook:
 .PHONY: image-scan-sriov-network-webhook
 image-scan-sriov-network-webhook:
 	trivy image --severity $(SEVERITIES) --no-progress --ignore-unfixed $(ORG)/hardened-sriov-network-webhook:$(TAG)
+
+PHONY: log
+log:
+	@echo "ARCH=$(ARCH)"
+	@echo "TAG=$(TAG)"
+	@echo "ORG=$(ORG)"
+	@echo "PKG=$(PKG)"
+	@echo "SRC=$(SRC)"
+	@echo "BUILD_META=$(BUILD_META)"
+	@echo "UNAME_M=$(UNAME_M)"
