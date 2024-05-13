@@ -25,7 +25,6 @@ image-build-operator:
 		--load \
 		--platform=$(ARCH) \
 		--pull \
-		--build-arg ARCH=$(ARCH) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--build-arg BUILD=$(BUILD_META) \
 		--target operator \
@@ -46,7 +45,6 @@ image-build-network-config-daemon:
 	docker buildx build \
 		--pull \
 		--platform=$(ARCH) \
-		--build-arg ARCH=$(ARCH) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--build-arg BUILD=$(BUILD_META) \
 		--target config-daemon \
@@ -67,7 +65,6 @@ image-build-sriov-network-webhook:
 	docker buildx build \
 		--pull \
 		--platform=$(ARCH) \
-		--build-arg ARCH=$(ARCH) \
 		--build-arg TAG=$(TAG:$(BUILD_META)=) \
 		--build-arg BUILD=$(BUILD_META) \
 		--target webhook \
