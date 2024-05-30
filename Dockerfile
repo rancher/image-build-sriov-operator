@@ -1,16 +1,15 @@
 # last commit on 2021-10-06
 ARG TAG="v1.2.0"
 ARG COMMIT="f2ca88418036a7836ea2c0bd1f648a47774997c4"
-ARG GOBORING_VERSION=v1.21.8b1
 ARG BCI_IMAGE=registry.suse.com/bci/bci-base
-ARG HARDENED_IMAGE=rancher/hardened-build-base:${GOBORING_VERSION}
+ARG GO_IMAGE=rancher/hardened-build-base:v1.21.8b1
 ARG ARCH
 
 # Image that provides cross compilation tooling.
 FROM --platform=$BUILDPLATFORM rancher/mirrored-tonistiigi-xx:1.3.0 as xx
 
 
-FROM --platform=$BUILDPLATFORM ${HARDENED_IMAGE} as base
+FROM --platform=$BUILDPLATFORM ${GO_IMAGE} as base
 ARG TAG
 ARG BUILD
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
