@@ -2,7 +2,7 @@
 ARG TAG="v1.2.0"
 ARG COMMIT="f2ca88418036a7836ea2c0bd1f648a47774997c4"
 ARG BCI_IMAGE=registry.suse.com/bci/bci-base
-ARG GO_IMAGE=rancher/hardened-build-base:v1.21.8b1
+ARG GO_IMAGE=rancher/hardened-build-base:v1.21.10b1
 ARG ARCH
 
 # Image that provides cross compilation tooling.
