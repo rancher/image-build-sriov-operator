@@ -30,6 +30,8 @@ jobs:
         tags: rancher/hardened-sriov-network-operator:${{ env.TAG }}-amd64
         target: operator
         file: Dockerfile
+        build-args: |
+          TAG=${{ env.TAG }}
 
     - name: Build container config-daemon image
       uses: docker/build-push-action@v5
@@ -40,6 +42,8 @@ jobs:
         tags: rancher/hardened-sriov-network-config-daemon:${{ env.TAG }}-amd64
         target: config-daemon
         file: Dockerfile
+        build-args: |
+          TAG=${{ env.TAG }}
 
     - name: Build container webhook image
       uses: docker/build-push-action@v5
@@ -50,6 +54,8 @@ jobs:
         tags: rancher/hardened-sriov-network-webhook:${{ env.TAG }}-amd64
         target: webhook
         file: Dockerfile
+        build-args: |
+          TAG=${{ env.TAG }}
       
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@0.21.0
@@ -92,6 +98,8 @@ jobs:
         tags: rancher/hardened-sriov-network-operator:${{ env.TAG }}-arm64
         target: operator
         file: Dockerfile
+        build-args: |
+          TAG=${{ env.TAG }}
 
     - name: Build container config-daemon image
       uses: docker/build-push-action@v5
@@ -102,6 +110,8 @@ jobs:
         tags: rancher/hardened-sriov-network-config-daemon:${{ env.TAG }}-arm64
         target: config-daemon
         file: Dockerfile
+        build-args: |
+          TAG=${{ env.TAG }}
 
     - name: Build container webhook image
       uses: docker/build-push-action@v5
@@ -112,3 +122,5 @@ jobs:
         tags: rancher/hardened-sriov-network-webhook:${{ env.TAG }}-arm64
         target: webhook
         file: Dockerfile
+        build-args: |
+          TAG=${{ env.TAG }}
