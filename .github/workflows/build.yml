@@ -22,7 +22,7 @@ jobs:
         echo "$(make -s log | grep TAG)" >> "$GITHUB_ENV"
 
     - name: Build container operator image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         build-args: ARCH=amd64
@@ -34,7 +34,7 @@ jobs:
           TAG=${{ env.TAG }}
 
     - name: Build container config-daemon image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         build-args: ARCH=amd64
@@ -46,7 +46,7 @@ jobs:
           TAG=${{ env.TAG }}
 
     - name: Build container webhook image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         build-args: ARCH=amd64
@@ -90,7 +90,7 @@ jobs:
         echo "$(make -s log | grep TAG)" >> "$GITHUB_ENV"
 
     - name: Build container operator image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         build-args: ARCH=arm64
@@ -102,7 +102,7 @@ jobs:
           TAG=${{ env.TAG }}
 
     - name: Build container config-daemon image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         build-args: ARCH=arm64
@@ -114,7 +114,7 @@ jobs:
           TAG=${{ env.TAG }}
 
     - name: Build container webhook image
-      uses: docker/build-push-action@v5
+      uses: docker/build-push-action@v6
       with:
         context: .
         build-args: ARCH=arm64
