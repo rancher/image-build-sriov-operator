@@ -1,5 +1,5 @@
 # last commit on 2021-10-06
-ARG TAG="v1.2.0"
+ARG TAG=v1.3.0
 ARG COMMIT="f2ca88418036a7836ea2c0bd1f648a47774997c4"
 ARG BCI_IMAGE=registry.suse.com/bci/bci-base
 ARG GO_IMAGE=rancher/hardened-build-base:v1.22.4b2
@@ -10,7 +10,7 @@ FROM --platform=$BUILDPLATFORM rancher/mirrored-tonistiigi-xx:1.3.0 as xx
 
 
 FROM --platform=$BUILDPLATFORM ${GO_IMAGE} as base
-ARG TAG
+ARG TAG=v1.3.0
 ARG BUILD
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
 # copy xx scripts to your build stage
@@ -23,7 +23,7 @@ RUN set -x && \
 
 FROM base as builder
 ENV CGO_ENABLED=0
-ARG TAG
+ARG TAG=v1.3.0
 ARG BUILD
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
 ENV GOFLAGS=-trimpath
