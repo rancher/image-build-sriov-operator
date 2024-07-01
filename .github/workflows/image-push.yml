@@ -48,6 +48,7 @@ jobs:
         context: .
         push: true
         tags: rancher/hardened-sriov-network-operator:${{ github.event.release.tag_name }}
+        target: operator
         file: Dockerfile
         platforms: linux/amd64, linux/arm64
         build-args: |
@@ -59,6 +60,7 @@ jobs:
         context: .
         push: true
         tags: rancher/hardened-sriov-network-config-daemon:${{ github.event.release.tag_name }}
+        target: config-daemon
         file: Dockerfile
         platforms: linux/amd64, linux/arm64
         build-args: |
@@ -70,6 +72,7 @@ jobs:
         context: .
         push: true
         tags: rancher/hardened-sriov-network-webhook:${{ github.event.release.tag_name }}
+        target: webhook
         file: Dockerfile
         platforms: linux/amd64, linux/arm64
         build-args: |
