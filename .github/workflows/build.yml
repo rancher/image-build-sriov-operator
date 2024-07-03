@@ -25,7 +25,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        build-args: ARCH=amd64
         push: false
         tags: rancher/hardened-sriov-network-operator:${{ env.TAG }}-amd64
         target: operator
@@ -37,7 +36,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        build-args: ARCH=amd64
         push: false
         tags: rancher/hardened-sriov-network-config-daemon:${{ env.TAG }}-amd64
         target: config-daemon
@@ -49,7 +47,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        build-args: ARCH=amd64
         push: false
         tags: rancher/hardened-sriov-network-webhook:${{ env.TAG }}-amd64
         target: webhook
@@ -93,7 +90,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        build-args: ARCH=arm64
         push: false
         tags: rancher/hardened-sriov-network-operator:${{ env.TAG }}-arm64
         target: operator
@@ -105,7 +101,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        build-args: ARCH=arm64
         push: false
         tags: rancher/hardened-sriov-network-config-daemon:${{ env.TAG }}-arm64
         target: config-daemon
@@ -117,7 +112,6 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        build-args: ARCH=arm64
         push: false
         tags: rancher/hardened-sriov-network-webhook:${{ env.TAG }}-arm64
         target: webhook
