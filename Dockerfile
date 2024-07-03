@@ -1,6 +1,5 @@
 ARG BCI_IMAGE=registry.suse.com/bci/bci-base
 ARG GO_IMAGE=rancher/hardened-build-base:v1.22.4b2
-ARG ARCH
 
 # Image that provides cross compilation tooling.
 FROM --platform=$BUILDPLATFORM rancher/mirrored-tonistiigi-xx:1.3.0 as xx
@@ -28,16 +27,16 @@ RUN git checkout tags/${TAG} -b ${TAG}
 RUN make clean && go mod download
 
 # cross-compilation setup
-ARG TARGETPLATFORM
+ARG TARGETARCH
 RUN export GOOS=$(xx-info os) &&\
-    export GOARCH=$(xx-info arch) &&\
-    export ARCH=$(xx-info arch) &&\
+    export GOARCH=${TARGETARCH} &&\
+    export ARCH=${TARGETARCH} &&\
     make _build-manager && \
     make _build-webhook && \
     make _build-sriov-network-config-daemon
-RUN mv /go/sriov-network-operator/build/_output/linux/$(xx-info arch)/sriov-network-config-daemon /usr/bin/ && \
-    mv /go/sriov-network-operator/build/_output/linux/$(xx-info arch)/webhook /usr/bin/webhook && \
-    mv /go/sriov-network-operator/build/_output/linux/$(xx-info arch)/manager /usr/bin/sriov-network-operator
+RUN mv /go/sriov-network-operator/build/_output/linux/${TARGETARCH}/sriov-network-config-daemon /usr/bin/ && \
+    mv /go/sriov-network-operator/build/_output/linux/${TARGETARCH}/webhook /usr/bin/webhook && \
+    mv /go/sriov-network-operator/build/_output/linux/${TARGETARCH}/manager /usr/bin/sriov-network-operator
 
 # Create the config daemon image
 FROM ${BCI_IMAGE} as config-daemon
