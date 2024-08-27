@@ -16,7 +16,7 @@ RUN set -x && \
 
 FROM base as builder
 ENV CGO_ENABLED=0
-ARG TAG=v1.3.0
+ARG TAG=v1.4.0
 ARG BUILD
 ENV VERSION_OVERRIDE=${TAG}${BUILD}
 ENV GOFLAGS=-trimpath
