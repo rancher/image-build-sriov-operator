@@ -2,10 +2,10 @@ ARG BCI_IMAGE=registry.suse.com/bci/bci-base
 ARG GO_IMAGE=rancher/hardened-build-base:v1.23.6b1
 
 # Image that provides cross compilation tooling.
-FROM --platform=$BUILDPLATFORM rancher/mirrored-tonistiigi-xx:1.5.0 as xx
+FROM --platform=$BUILDPLATFORM rancher/mirrored-tonistiigi-xx:1.5.0 AS xx
 
 
-FROM --platform=$BUILDPLATFORM ${GO_IMAGE} as base
+FROM --platform=$BUILDPLATFORM ${GO_IMAGE} AS base
 # copy xx scripts to your build stage
 COPY --from=xx / /
 RUN apk add file make git clang lld
@@ -14,7 +14,7 @@ ARG TARGETPLATFORM
 RUN set -x && \
     xx-apk --no-cache add musl-dev gcc lld 
 
-FROM base as builder
+FROM base AS builder
 ENV CGO_ENABLED=0
 ARG TAG=v1.5.0
 ARG BUILD
@@ -39,7 +39,7 @@ RUN mv /go/sriov-network-operator/build/_output/linux/${TARGETARCH}/sriov-networ
     mv /go/sriov-network-operator/build/_output/linux/${TARGETARCH}/manager /usr/bin/sriov-network-operator
 
 # Create the config daemon image
-FROM ${BCI_IMAGE} as config-daemon
+FROM ${BCI_IMAGE} AS config-daemon
 WORKDIR /
 COPY centos.repo /etc/yum.repos.d/centos.repo
 RUN zypper update -y && \
@@ -50,7 +50,7 @@ COPY --from=builder /go/sriov-network-operator/bindata /bindata
 ENTRYPOINT ["/usr/bin/sriov-network-config-daemon"]
 
 # Create the webhook image
-FROM ${BCI_IMAGE} as webhook
+FROM ${BCI_IMAGE} AS webhook
 WORKDIR /
 LABEL io.k8s.display-name="sriov-network-webhook" \
       io.k8s.description="This is an admission controller webhook that mutates and validates customer resources of sriov network operator."
@@ -59,7 +59,7 @@ COPY --from=builder /usr/bin/webhook /usr/bin/webhook
 CMD ["/usr/bin/webhook"]
 
 # Create the operator image
-FROM ${BCI_IMAGE} as operator
+FROM ${BCI_IMAGE} AS operator
 WORKDIR /
 COPY --from=builder /usr/bin/sriov-network-operator /usr/bin/sriov-network-operator
 COPY --from=builder /go/sriov-network-operator/bindata /bindata
