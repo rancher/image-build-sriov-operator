@@ -54,6 +54,7 @@ FROM ${BCI_IMAGE} as webhook
 WORKDIR /
 LABEL io.k8s.display-name="sriov-network-webhook" \
       io.k8s.description="This is an admission controller webhook that mutates and validates customer resources of sriov network operator."
+USER 1001
 COPY --from=builder /usr/bin/webhook /usr/bin/webhook
 CMD ["/usr/bin/webhook"]
 
