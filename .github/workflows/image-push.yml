@@ -63,7 +63,7 @@ jobs:
         password: ${{ env.PRIME_REGISTRY_PASSWORD }}
 
     - name: Build operator container image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       with:
         context: .
         push: true
@@ -75,7 +75,7 @@ jobs:
           TAG=${{ env.TAG }}
 
     - name: Build config-daemon container image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       with:
         context: .
         push: true
@@ -87,7 +87,7 @@ jobs:
           TAG=${{ env.TAG }}
 
     - name: Build webhook container image
-      uses: docker/build-push-action@v6
+      uses: docker/build-push-action@v7
       with:
         context: .
         push: true
