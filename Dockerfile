@@ -47,6 +47,8 @@ RUN zypper update -y && \
     zypper install -y hwdata $ARCH_DEP_PKGS
 COPY --from=builder /usr/bin/sriov-network-config-daemon /usr/bin/
 COPY --from=builder /go/sriov-network-operator/bindata /bindata
+# Workaround for https://bugzilla.suse.com/show_bug.cgi?id=1247914
+RUN sed -i 's/EVALUATE=udev/#EVALUATE=udev\n# workaround for https:\/\/bugzilla.suse.com\/show_bug.cgi?id=1247914\nEVALUATE=scan/' /etc/blkid.conf
 ENTRYPOINT ["/usr/bin/sriov-network-config-daemon"]
 
 # Create the webhook image
